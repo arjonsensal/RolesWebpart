@@ -23,6 +23,8 @@ export interface IRolesWebpartWebPartProps {
   description: string;
   listName: string;
   unique: string;
+  filterList: string;
+  uniqueFilter: string;
 }
 
 export default class RolesWebpartWebPart extends BaseClientSideWebPart<IRolesWebpartWebPartProps> {
@@ -34,7 +36,9 @@ export default class RolesWebpartWebPart extends BaseClientSideWebPart<IRolesWeb
         description: this.properties.description,
         listName: this.properties.listName,
         context: this.context,
-        unique: this.properties.unique
+        unique: this.properties.unique,
+        filterList: this.properties.filterList,
+        uniqueFilter: this.properties.uniqueFilter
       }
     );
 
@@ -61,12 +65,42 @@ export default class RolesWebpartWebPart extends BaseClientSideWebPart<IRolesWeb
     });
   }
   
+  private async loadLists1(): Promise<IDropdownOption[]> {
+    return new Promise<IDropdownOption[]>(async(resolve: (options: IDropdownOption[]) => void, reject: (error: any) => void) => {
+      
+      setTimeout(async ()=> {
+        var a = new Array();
+        const restApi = `${this.context.pageContext.web.absoluteUrl}/_api/lists`;
+        await this.context.spHttpClient.get(restApi, SPHttpClient.configurations.v1)
+          .then(resp => { return resp.json(); })
+          .then(items => {
+            items.value.forEach(element => {
+              if(element.Hidden === false && element.IsCatalog === false) {
+                a.push({key: element.Title, text: element.Title});
+              }
+            });
+            resolve(a);
+          });
+      }, 1500);
+    });
+  }
+  
   
   private onListChange(propertyPath: string, newValue: any): void {
     const oldValue: any = get(this.properties, propertyPath);
     // store new value in web part properties
     update(this.properties, propertyPath, (): any => { return newValue; });
-    this.context.propertyPane.refresh();
+    // refresh web part
+    this.render();
+    // this.context.propertyPane.refresh();
+  }
+
+  
+  private onListChange1(propertyPath: string, newValue: any): void {
+    const oldValue: any = get(this.properties, propertyPath);
+    // store new value in web part properties
+    update(this.properties, propertyPath, (): any => { return newValue; });
+    // this.context.propertyPane.refresh();
     // refresh web part
     this.render();
   }
@@ -79,6 +113,10 @@ export default class RolesWebpartWebPart extends BaseClientSideWebPart<IRolesWeb
     return Version.parse('2.0');
   }
 
+  // protected get disableReactivePropertyChanges(): boolean {
+  //   return true;
+  // }
+  
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
@@ -99,8 +137,21 @@ export default class RolesWebpartWebPart extends BaseClientSideWebPart<IRolesWeb
                   selectedKey: this.properties.listName
                 }),
                 PropertyPaneTextField('unique', {
-                  label: "Unique Column to Filter"
+                  label: "Column to use in Dropdown"
+                })
+              ]
+            },
+            {
+              groupFields: [
+                new PropertyPaneAsyncDropdown('filterList', {
+                  label: "Select List for dynamic filtering",
+                  loadOptions: this.loadLists1.bind(this),
+                  onPropertyChange: this.onListChange1.bind(this),
+                  selectedKey: this.properties.filterList
                 }),
+                PropertyPaneTextField('uniqueFilter', {
+                  label: "Column to Filter from Dropdown"
+                })
               ]
             }
           ]

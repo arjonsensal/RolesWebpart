@@ -5,5 +5,7 @@ export interface IRolesWebpartProps {
   context: WebPartContext;  
   listName: string;
   unique: string;
+  filterList: string;
+  uniqueFilter: string;
 }
   

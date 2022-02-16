@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200&display=swap');
+
+.wrapper{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 16rem));
+    gap: 5rem;
+}
+
+.card-container{
+    border-radius: 5px;
+    width: 300px;
+    overflow: hidden;
+    box-shadow: 0px 0px 15px -5px;
+    transition: 0.3s;
+    animation: ease-in;
+    cursor: pointer;
+}
+
+.card-container:hover{
+    transform: scale(1.03);
+    box-shadow: 0 0 15px 0;
+}
+
+.img-container img{
+    overflow: hidden;
+    height: 200px;
+    width: 300px;
+}
+
+.body-container{
+    margin: 1em;
+}
+
+p.key-name{
+    font-family: Arial, Helvetica, sans-serif;
+    color: dimgray;
+    opacity: .5;
+    size: 1rem;
+}
+div.key-desc{
+    font-family: Arial, Helvetica, sans-serif;
+    size: 2.5rem;
+}

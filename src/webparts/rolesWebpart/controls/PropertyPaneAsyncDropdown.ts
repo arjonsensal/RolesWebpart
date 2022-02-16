@@ -60,6 +60,8 @@ export class PropertyPaneAsyncDropdown implements IPropertyPaneField<IPropertyPa
   }
 
   private onChanged(option: IDropdownOption, index?: number): void {
+    console.log(option)
+    console.log(this)
     this.properties.onPropertyChange(this.targetProperty, option.key);
   }
 }
