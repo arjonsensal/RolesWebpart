@@ -7,5 +7,8 @@ export interface IRolesWebpartProps {
   unique: string;
   filterList: string;
   uniqueFilter: string;
+  optionalColumnFilter: string;
+  optionalColumnFilterValue: string;
+  removeColumns: string;
 }
   

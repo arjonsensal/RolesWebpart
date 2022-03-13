@@ -42,7 +42,7 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
     // this._loadList("Activities", "Title", "Title", 'Card');
     this._loadChoices(this.props.filterList, "Card");
     this._loadChoices(this.props.listName, "Table");
-    this._loadListItemUrl(this.props.filterList);
+    this._loadListItemUrl(this.props.listName);
     // this._loadChoices("Activities");
   }
 
@@ -50,7 +50,10 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
   }
 
   public _loadList(list, unique, title, item):void { 
-    const restApi = `${this.props.context.pageContext.web.absoluteUrl}/_api/web/lists/GetByTitle('${list}')/items?$filter=${unique} eq '${title}'`;
+    let restApi = `${this.props.context.pageContext.web.absoluteUrl}/_api/web/lists/GetByTitle('${list}')/items?$filter=${unique} eq '${title}'`;
+    if (title === "1") {
+      restApi = `${this.props.context.pageContext.web.absoluteUrl}/_api/web/lists/GetByTitle('${list}')/items`;
+    }
     this.props.context.spHttpClient.get(restApi, SPHttpClient.configurations.v1)
       .then(resp => { return resp.json(); })
       .then(items => {
@@ -80,7 +83,6 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
         items.value.forEach((item, index) => {
           if (index > 2) {
             if (itemType !== "Card") {
-              console.log(item)
               var joined = this.state.list.concat(
                 {
                   name: item.StaticName, 
@@ -91,9 +93,7 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
                   //   // const par = (disp) => {
                   //   // // if(item.TypeDisplayName.includes('lines of text')) {
                   //   //   // console.log("true")
-                  console.log(itemx[item.StaticName])
                   if(itemx[item.StaticName].includes("<div")) {
-                    console.log("aaa")
                     return <div dangerouslySetInnerHTML={{__html: itemx[item.StaticName]}}style={{display: "table-cell", whiteSpace: "pre-wrap"}} />;
                   } else {
                     return (
@@ -120,10 +120,12 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
         .then(resp => { return resp.json(); })
         .then(items => {
           if (itemType !== "Card") {
-            let tempIt = [];
+            let tempIt = [{key: "1", text: "All"}];
             items.value.forEach((item, index) => {
               tempIt.push({key: item[this.props.unique], text: item[this.props.unique]});
             });
+            var f = tempIt.sort((a, b) => (a.key > b.key) ? 1 : -1);
+            console.log(f)
             this.setState({
               choice: tempIt ? tempIt : []
             });
@@ -157,30 +159,37 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
               })
               return card;
             });
-            this.setState({ cardItems: output, filteredCardItems: output });
+            var myKeys = Object.keys(output[0]);
+            var pageFilter = this.props.optionalColumnFilter;
+            var pageFilterValue = this.props.optionalColumnFilterValue;
+            var cardKey1 = myKeys.filter(function(key){ return (key.indexOf(pageFilter) !== -1) });
+            var filteredPage = output;
+            if (pageFilter) {
+              filteredPage = output.filter(function(card) {
+                return card[cardKey1[0]].includes(pageFilterValue);
+              });
+            }
+            this.setState({ cardItems: filteredPage, filteredCardItems: filteredPage });
           }
         });
       });
-    // if (itemType === "Card") return;
   }
   public onComboBoxChange = (ev: React.FormEvent<IComboBox>, option?: IComboBoxOption): void => {
     this._loadList(this.props.listName, this.props.unique, option.key, 'Table');
     this.setState({ SingleSelect: option.key });
-    
-    var myKeys = Object.keys(this.state.cardItems[0]);
-    console.log(myKeys)
-    console.log(this.props.uniqueFilter)
-    var string = this.props.uniqueFilter;
-    var cardKey = myKeys.filter(function(key){ return key.indexOf(string) !== -1 });
-    this.setState({
-      filteredCardItems: this.state.cardItems.filter(function(card) {
-        return card[cardKey[0]].includes(option.key);
-      })
-    });
+    if(this.state.cardItems.length !== 0) {
+      var myKeys = Object.keys(this.state.cardItems[0]);
+      var string = this.props.uniqueFilter;
+      var cardKey = myKeys.filter(function(key){ return (key.indexOf(string) !== -1) });
+      this.setState({
+        filteredCardItems: this.state.cardItems.filter(function(card) {
+          return (option.key != "1") ? card[cardKey[0]].includes(option.key) : card[cardKey[0]];
+        })
+      });
+    }
   }
   public render(): React.ReactElement<IRolesWebpartProps> {
     const viewFields: IViewField[] = this.state.list;
-    console.log(this.state.choice)
     var getImageUrl = (image) => {
       if (image === null) return "https://genesisairway.com/wp-content/uploads/2019/05/no-image.jpg";
       var imageObj = JSON.parse(image)
@@ -223,6 +232,7 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
                 </div>
                 <div className="body-container">
                 {Object.keys(card).map((keyName, i) => (
+                  ((this.props.removeColumns) ? !this.props.removeColumns.includes(keyName) : true) &&
                   (keyName !== "Image" && keyName !== "id") && 
                   <div>
                     <p className="key-name">{keyName}</p>

@@ -3,22 +3,22 @@
 .wrapper{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(12rem, 16rem));
-    gap: 5rem;
+    gap: 3rem;
 }
 
 .card-container{
     border-radius: 5px;
-    width: 300px;
+    width: 288px;
     overflow: hidden;
-    box-shadow: 0px 0px 15px -5px;
-    transition: 0.3s;
-    animation: ease-in;
+    box-shadow: 0px 0px 5px 0px #aca9a9;
+    /* transition: 0.1s; */
+    /* animation: ease-in; */
     cursor: pointer;
 }
 
 .card-container:hover{
-    transform: scale(1.03);
-    box-shadow: 0 0 15px 0;
+    /* transform: scale(1.00); */
+    box-shadow: 0 0 6px 0 #4d4d4d;
 }
 
 .img-container img{
@@ -35,9 +35,9 @@ p.key-name{
     font-family: Arial, Helvetica, sans-serif;
     color: dimgray;
     opacity: .5;
-    size: 1rem;
+    size: .5rem;
 }
 div.key-desc{
     font-family: Arial, Helvetica, sans-serif;
-    size: 2.5rem;
+    size: 2rem;
 }

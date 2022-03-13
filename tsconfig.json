@@ -23,7 +23,7 @@
     ],
     "lib": [
       "es5",
-      "dom",
+      "dom","es2017",
       "es2015.collection",
       "es2015.promise"
     ]

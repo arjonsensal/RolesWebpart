@@ -16,6 +16,7 @@ import { IDropdownOption } from 'office-ui-fabric-react/lib/components/Dropdown'
 import { update, get } from '@microsoft/sp-lodash-subset';
 import { SPHttpClient } from '@microsoft/sp-http';
 
+
 const telemetry = PnPTelemetry.getInstance();
 telemetry.optOut();
 
@@ -25,6 +26,9 @@ export interface IRolesWebpartWebPartProps {
   unique: string;
   filterList: string;
   uniqueFilter: string;
+  optionalColumnFilter: string;
+  optionalColumnFilterValue: string;
+  removeColumns: string;
 }
 
 export default class RolesWebpartWebPart extends BaseClientSideWebPart<IRolesWebpartWebPartProps> {
@@ -38,7 +42,10 @@ export default class RolesWebpartWebPart extends BaseClientSideWebPart<IRolesWeb
         context: this.context,
         unique: this.properties.unique,
         filterList: this.properties.filterList,
-        uniqueFilter: this.properties.uniqueFilter
+        uniqueFilter: this.properties.uniqueFilter,
+        optionalColumnFilter: this.properties.optionalColumnFilter,
+        optionalColumnFilterValue: this.properties.optionalColumnFilterValue,
+        removeColumns: this.properties.removeColumns
       }
     );
 
@@ -84,7 +91,6 @@ export default class RolesWebpartWebPart extends BaseClientSideWebPart<IRolesWeb
       }, 1500);
     });
   }
-  
   
   private onListChange(propertyPath: string, newValue: any): void {
     const oldValue: any = get(this.properties, propertyPath);
@@ -151,6 +157,23 @@ export default class RolesWebpartWebPart extends BaseClientSideWebPart<IRolesWeb
                 }),
                 PropertyPaneTextField('uniqueFilter', {
                   label: "Column to Filter from Dropdown"
+                })
+              ]
+            },
+            {
+              groupFields: [
+                PropertyPaneTextField('optionalColumnFilter', {
+                  label: "Optional filter (Select Column to Filter Based on Page)"
+                }),
+                PropertyPaneTextField('optionalColumnFilterValue', {
+                  label: "Page Name"
+                })
+              ]
+            },
+            {
+              groupFields: [
+                PropertyPaneTextField('removeColumns', {
+                  label: "Remove Columns in Card List (Seperate by Comma. Ex. Column1,Column2..)"
                 })
               ]
             }
