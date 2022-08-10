@@ -42,7 +42,7 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
     // this._loadList("Activities", "Title", "Title", 'Card');
     this._loadChoices(this.props.filterList, "Card");
     this._loadChoices(this.props.listName, "Table");
-    this._loadListItemUrl(this.props.listName);
+    this._loadListItemUrl(this.props.filterList);
     // this._loadChoices("Activities");
   }
 
@@ -207,7 +207,7 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
     }
     return (
       <div>
-        <h3>{this.props.description}</h3>
+        <h2>{this.props.description}</h2>
         <ComboBox
           placeholder="Select Role"
           selectedKey={this.state.SingleSelect}
@@ -221,14 +221,14 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
                 items={this.state.items}
                 compact={true}
                 viewFields={viewFields} />
-        <h3>{this.props.filterList}</h3>
-        <div className="wrapper">
+        <h2>{this.props.filterList}</h2>
+        {(this.state.filteredCardItems.length != 0) ? <div className="wrapper">
           {this.state.filteredCardItems.map((card, i) => {
             var myKeys = Object.keys(card);
             return (
               <div className="card-container" onClick={(e) => {handleContainerClick(e, card.id)}}>
                 <div className="img-container">
-                    <img src={(myKeys.indexOf("Image") !== -1) ? getImageUrl(card.Image): "https://genesisairway.com/wp-content/uploads/2019/05/no-image.jpg"} alt="" style={{objectFit: 'fill'}}/>
+                    <img src={(myKeys.indexOf("Image") !== -1) ? getImageUrl(card.Image): "https://genesisairway.com/wp-content/uploads/2019/05/no-image.jpg"} alt="" style={{objectFit: 'cover'}}/>
                 </div>
                 <div className="body-container">
                 {Object.keys(card).map((keyName, i) => (
@@ -244,7 +244,10 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
               </div>
             )
           })}
-        </div>
+        </div> : 
+        <div className='text-center'> 
+          <h4 style={{color: 'gray'}}>No Cards Found</h4>
+        </div>}
       </div>
     );
   }
