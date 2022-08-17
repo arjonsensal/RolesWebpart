@@ -32,12 +32,15 @@
 }
 
 p.key-name{
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
     color: dimgray;
-    opacity: .5;
-    size: .5rem;
+    font-weight: 400;
+    font-size: 12px;
+    height: 20px;
 }
 div.key-desc{
-    font-family: Arial, Helvetica, sans-serif;
-    size: 2rem;
+    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    height: 20px;
 }

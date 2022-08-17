@@ -81,8 +81,8 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
       .then(resp => { return resp.json(); })
       .then(items => {
         items.value.forEach((item, index) => {
-          if (index > 2) {
-            if (itemType !== "Card") {
+          if (itemType !== "Card") {
+            if (index > 2) {
               var joined = this.state.list.concat(
                 {
                   name: item.StaticName, 
@@ -108,10 +108,12 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
                   }
                 });
               this.setState({ list: joined });
-            } else {
-              var joined = this.state.cardCol.concat({stat: item.StaticName, title: item.Title});
-              this.setState({ cardCol: joined });
             }
+          } else {
+              if (index) {
+                var joined = this.state.cardCol.concat({stat: item.StaticName, title: item.Title});
+                this.setState({ cardCol: joined });
+              }
           }
         });
         
@@ -125,7 +127,6 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
               tempIt.push({key: item[this.props.unique], text: item[this.props.unique]});
             });
             var f = tempIt.sort((a, b) => (a.key > b.key) ? 1 : -1);
-            console.log(f)
             this.setState({
               choice: tempIt ? tempIt : []
             });
@@ -227,16 +228,13 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
             var myKeys = Object.keys(card);
             return (
               <div className="card-container" onClick={(e) => {handleContainerClick(e, card.id)}}>
-                <div className="img-container">
-                    <img src={(myKeys.indexOf("Image") !== -1) ? getImageUrl(card.Image): "https://genesisairway.com/wp-content/uploads/2019/05/no-image.jpg"} alt="" style={{objectFit: 'cover'}}/>
-                </div>
                 <div className="body-container">
                 {Object.keys(card).map((keyName, i) => (
-                  ((this.props.removeColumns) ? !this.props.removeColumns.includes(keyName) : true) &&
+                  !this.props.removeColumns.includes(keyName) &&
                   (keyName !== "Image" && keyName !== "id") && 
                   <div>
                     <p className="key-name">{keyName}</p>
-                    <div style={{marginTop: '-15px'}}><div className="key-desc" dangerouslySetInnerHTML={{__html: (i === 1) ? <strong>{card[keyName] !== null ? card[keyName] : "--"}</strong> : (card[keyName] !== null) ? ((typeof card[keyName] === "object") ? card[keyName].join(",") : card[keyName]) : "--"}}style={{display: "table-cell", whiteSpace: "pre-wrap", margin: '20px'}} /></div>
+                    <div style={{marginTop: '-15px'}}><div className="key-desc" dangerouslySetInnerHTML={{__html: (i === 1) ? card[keyName] !== null ? card[keyName] : "--" : (card[keyName] !== null) ? ((typeof card[keyName] === "object") ? card[keyName].join(",") : card[keyName]) : "--"}}style={{display: "table-cell", whiteSpace: "pre-wrap", margin: '20px'}} /></div>
                     {/* <p className="key-desc">{(i === 1) ? <strong>{card[keyName] !== null ? card[keyName] : "--"}</strong> : (card[keyName] !== null) ? ((typeof card[keyName] === "object") ? card[keyName].join(",") : card[keyName]) : "--"}</p> */}
                   </div>)
                 )}
