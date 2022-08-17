@@ -1,6 +1,6 @@
 {
   "name": "roles-webpart",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "main": "lib/index.js",
   "scripts": {
