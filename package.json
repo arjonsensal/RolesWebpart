@@ -26,6 +26,7 @@
     "react": "^16.13.1",
     "react-dom": "16.9.0",
     "react-select-plus": "^1.0.0-rc.3.patch12",
+    "truncate-html": "^1.0.4",
     "yarn": "^1.22.17"
   },
   "devDependencies": {

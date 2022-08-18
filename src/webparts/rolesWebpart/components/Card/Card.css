@@ -3,14 +3,15 @@
 .wrapper{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(12rem, 16rem));
-    gap: 3rem;
+    row-gap: 1rem;
+    column-gap: 3rem;
 }
 
 .card-container{
     border-radius: 5px;
     width: 288px;
     overflow: hidden;
-    box-shadow: 0px 0px 5px 0px #aca9a9;
+    box-shadow: 0px 0px 3px 0px #aca9a9;
     /* transition: 0.1s; */
     /* animation: ease-in; */
     cursor: pointer;
@@ -18,7 +19,7 @@
 
 .card-container:hover{
     /* transform: scale(1.00); */
-    box-shadow: 0 0 6px 0 #4d4d4d;
+    box-shadow: 0 0 4px 0 #969595;
 }
 
 .img-container img{
@@ -32,15 +33,15 @@
 }
 
 p.key-name{
-    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
     color: dimgray;
     font-weight: 400;
     font-size: 12px;
     height: 20px;
 }
 div.key-desc{
-    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
-    font-weight: 600;
+    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+    font-weight: 600; 
     font-size: 15px;
-    height: 20px;
+    max-height: 20px;
 }

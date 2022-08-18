@@ -7,6 +7,7 @@ import "@pnp/sp/lists";
 import "@pnp/sp/items";
 import './Card/Card.css';
 import styles from './RolesWebpart.module.scss';
+import truncate from 'truncate-html';
 
 export interface IRolesViewState {
   choice: any[];
@@ -234,7 +235,8 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
                   (keyName !== "Image" && keyName !== "id") && 
                   <div>
                     <p className="key-name">{keyName}</p>
-                    <div style={{marginTop: '-15px'}}><div className="key-desc" dangerouslySetInnerHTML={{__html: (i === 1) ? card[keyName] !== null ? card[keyName] : "--" : (card[keyName] !== null) ? ((typeof card[keyName] === "object") ? card[keyName].join(",") : card[keyName]) : "--"}}style={{display: "table-cell", whiteSpace: "pre-wrap", margin: '20px'}} /></div>
+                    {/* <div style={{marginTop: '-15px'}}> <span className="key-desc"> {(card[keyName] !== null) && card[keyName].replace(/<\/?("[^"]*"|'[^']*'|[^>])*(>|$)/g, "")}</span></div> */}
+                    <div style={{marginTop: '-15px'}}><div className="key-desc" dangerouslySetInnerHTML={{__html: (i === 1) ? (card[keyName] !== null ? truncate(card[keyName], 120) : "--") : (card[keyName] !== null) ? ((typeof card[keyName] === "object") ? card[keyName].join(",") : truncate(card[keyName], 120)) : "--"}}style={{display: "table-cell", whiteSpace: "pre-line", margin: '20px'}} /></div>
                     {/* <p className="key-desc">{(i === 1) ? <strong>{card[keyName] !== null ? card[keyName] : "--"}</strong> : (card[keyName] !== null) ? ((typeof card[keyName] === "object") ? card[keyName].join(",") : card[keyName]) : "--"}</p> */}
                   </div>)
                 )}
