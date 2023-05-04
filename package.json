@@ -7,7 +7,8 @@
     "build": "gulp bundle",
     "clean": "gulp clean",
     "test": "gulp test",
-    "serve": "gulp bundle --custom-serve --max_old_space_size=4096 && fast-serve"
+    "serve": "gulp bundle --custom-serve --max_old_space_size=4096 && fast-serve",
+    "postversion": "gulp version-sync"
   },
   "dependencies": {
     "@microsoft/sp-application-base": "^1.12.1",
