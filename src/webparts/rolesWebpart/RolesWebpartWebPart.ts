@@ -24,6 +24,7 @@ export interface IRolesWebpartWebPartProps {
   description: string;
   listName: string;
   unique: string;
+  columns: string;
   filterList: string;
   uniqueFilter: string;
   optionalColumnFilter: string;
@@ -41,6 +42,7 @@ export default class RolesWebpartWebPart extends BaseClientSideWebPart<IRolesWeb
         listName: this.properties.listName,
         context: this.context,
         unique: this.properties.unique,
+        columns: this.properties.columns,
         filterList: this.properties.filterList,
         uniqueFilter: this.properties.uniqueFilter,
         optionalColumnFilter: this.properties.optionalColumnFilter,
@@ -144,6 +146,9 @@ export default class RolesWebpartWebPart extends BaseClientSideWebPart<IRolesWeb
                 }),
                 PropertyPaneTextField('unique', {
                   label: "Column to use in Dropdown"
+                }),
+                PropertyPaneTextField('columns', {
+                  label: "Columns to Include in Grid"
                 })
               ]
             },

@@ -40,11 +40,9 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
   }
 
   public componentDidMount() {
-    // this._loadList("Activities", "Title", "Title", 'Card');
     this._loadChoices(this.props.filterList, "Card");
     this._loadChoices(this.props.listName, "Table");
     this._loadListItemUrl(this.props.filterList);
-    // this._loadChoices("Activities");
   }
 
   public componentDidUpdate() {
@@ -78,12 +76,13 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
   
   public _loadChoices(listName, itemType):void { 
     const restApi2 = `${this.props.context.pageContext.web.absoluteUrl}/_api/web/lists/GetByTitle('${listName}')/fields?$filter=ReadOnlyField eq false and Hidden eq false`;
+    let columns = this.props.columns.split(",");
     this.props.context.spHttpClient.get(restApi2, SPHttpClient.configurations.v1)
       .then(resp => { return resp.json(); })
       .then(items => {
         items.value.forEach((item, index) => {
           if (itemType !== "Card") {
-            if (index > 2) {
+            if (columns.includes(item.Title)) {
               var joined = this.state.list.concat(
                 {
                   name: item.StaticName, 
@@ -94,7 +93,7 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
                   //   // const par = (disp) => {
                   //   // // if(item.TypeDisplayName.includes('lines of text')) {
                   //   //   // console.log("true")
-                  if(itemx[item.StaticName].includes("<div")) {
+                  if(itemx[item.StaticName] && itemx[item.StaticName].includes("<div")) {
                     return <div dangerouslySetInnerHTML={{__html: itemx[item.StaticName]}}style={{display: "table-cell", whiteSpace: "pre-wrap"}} />;
                   } else {
                     return (
@@ -138,10 +137,7 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
               this.state.cardCol.forEach(el => {
                 var matchingKeys = myKeys.filter(function(key){ return key.indexOf(el.stat) !== -1 });
                 obj[matchingKeys[0]] = element[matchingKeys[0]];
-                // if (myKeys.indexOf(el) !== -1) {
-                //   console.log("true")
-                // }
-              })
+              });
               obj['id'] = element['Id'];
               var joined3 = this.state.cardItems.concat(obj);
               this.setState({ cardItems: joined3 });
