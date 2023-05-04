@@ -47,6 +47,8 @@ gulp.task('version-sync', function () {
   gutil.log('New Version:\t' + pkgSolution.solution.version);
 
   // write changed package-solution file
-  fs.writeFile('./config/package-solution.json', JSON.stringify(pkgSolution, null, 4));
+  fs.writeFile('./config/package-solution.json', JSON.stringify(pkgSolution, null, 4), function(err, result) {
+    if(err) console.log('error', err)
+  });
 
 });
