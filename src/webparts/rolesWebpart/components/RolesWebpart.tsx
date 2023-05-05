@@ -76,7 +76,7 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
   
   public _loadChoices(listName, itemType):void { 
     const restApi2 = `${this.props.context.pageContext.web.absoluteUrl}/_api/web/lists/GetByTitle('${listName}')/fields?$filter=ReadOnlyField eq false and Hidden eq false`;
-    let columns = this.props.columns.split(",");
+    let columns = this.props.columns?.split(",");
     this.props.context.spHttpClient.get(restApi2, SPHttpClient.configurations.v1)
       .then(resp => { return resp.json(); })
       .then(items => {
