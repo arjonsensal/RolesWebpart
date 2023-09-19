@@ -10,7 +10,6 @@ node_modules
 dist
 lib
 release
-solution
 temp
 
 # Coverage directory used by tools like istanbul
