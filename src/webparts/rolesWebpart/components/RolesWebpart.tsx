@@ -122,7 +122,7 @@ export default class RolesWebpart extends React.Component<IRolesWebpartProps,IRo
         .then(resp => { return resp.json(); })
         .then(items => {
           if (itemType !== "Card") {
-            let tempIt = [{key: "1", text: "All"}];
+            let tempIt = [];
             items.value.forEach((item, index) => {
               tempIt.push({key: item[this.props.unique], text: item[this.props.unique]});
             });
